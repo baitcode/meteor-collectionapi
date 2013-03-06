@@ -13,7 +13,10 @@ function CollectionAPI(options) {
     listenHost: undefined,
     authToken: undefined,
     privateKeyFile: 'privatekey.pem',
-    certificateFile: 'certificate.pem'
+    certificateFile: 'certificate.pem',
+    alterDataOnPut: null,
+    alterDataOnPost: null,
+    alterDataOnGet: null
   };
   _.extend(self.options, options || {});
 };
@@ -170,6 +173,9 @@ CollectionAPI._requestListener.prototype._getRequest = function() {
 
       var records = [];
       collection_result.forEach(function(record) {
+        if (self.options.alterDataOnGet){
+            record = self.options.alterDataOnGet(record);
+        }
         records.push(record);
       });
 
@@ -203,7 +209,10 @@ CollectionAPI._requestListener.prototype._putRequest = function() {
   self._request.on('end', function() {
     Fiber(function() {
       try {
-        self._requestCollection.update(self._requestPath.collectionId, JSON.parse(requestData));
+          if (self.options.alterDataOnPut){
+              requestData = self.options.alterDataOnPut(requestData);
+          }
+          self._requestCollection.update(self._requestPath.collectionId, JSON.parse(requestData));
       } catch (e) {
         return self._internalServerErrorResponse(e);
       }
@@ -241,6 +250,9 @@ CollectionAPI._requestListener.prototype._postRequest = function() {
   self._request.on('end', function() {
     Fiber(function() {
       try {
+        if (self.options.alterDataOnPost){
+          requestData = self.options.alterDataOnPost(requestData);
+        }
         self._requestPath.collectionId = self._requestCollection.insert(JSON.parse(requestData));
       } catch (e) {
         return self._internalServerErrorResponse(e);
