@@ -1,8 +1,8 @@
 {
-  "name": "collection-api",
-  "description": "Perform CRUD operations on Collections over a RESTful API",
-  "homepage": "https://github.com/crazytoad/meteor-collectionapi",
-  "author": "Todd Colton",
-  "version": "0.1.12",
-  "git": "https://github.com/crazytoad/meteor-collectionapi.git"
+  "name": "bait-collection-api",
+  "description": "Perform CRUD operations on Collections over a RESTful API with data alteration support",
+  "homepage": "https://github.com/bait/meteor-collectionapi",
+  "author": "Todd Colton, Ilya Batiy",
+  "version": "0.0.1",
+  "git": "https://github.com/bait/meteor-collectionapi.git"
 }
