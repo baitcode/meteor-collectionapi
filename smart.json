@@ -3,6 +3,6 @@
   "description": "Perform CRUD operations on Collections over a RESTful API with data alteration support",
   "homepage": "https://github.com/baitcode/meteor-collectionapi",
   "author": "Todd Colton, Ilya Batiy",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "git": "https://github.com/baitcode/meteor-collectionapi.git"
 }
