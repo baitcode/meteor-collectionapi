@@ -162,6 +162,7 @@ CollectionAPI._requestListener.prototype._requestMethodAllowed = function (metho
 
 CollectionAPI._requestListener.prototype._getRequest = function() {
   var self = this;
+  var options = self._server.options;
 
   Fiber(function() {
 
@@ -173,8 +174,8 @@ CollectionAPI._requestListener.prototype._getRequest = function() {
 
       var records = [];
       collection_result.forEach(function(record) {
-        if (self.options.alterDataOnGet){
-            record = self.options.alterDataOnGet(record);
+        if (options.alterDataOnGet){
+            record = options.alterDataOnGet(record);
         }
         records.push(record);
       });
@@ -195,6 +196,7 @@ CollectionAPI._requestListener.prototype._getRequest = function() {
 
 CollectionAPI._requestListener.prototype._putRequest = function() {
   var self = this;
+  var options = self._server.options;
 
   if (! self._requestPath.collectionId) {
     return self._notFoundResponse('Missing _id');
@@ -209,8 +211,8 @@ CollectionAPI._requestListener.prototype._putRequest = function() {
   self._request.on('end', function() {
     Fiber(function() {
       try {
-          if (self.options.alterDataOnPut){
-              requestData = self.options.alterDataOnPut(requestData);
+          if (options.alterDataOnPut){
+              requestData = options.alterDataOnPut(requestData);
           }
           self._requestCollection.update(self._requestPath.collectionId, JSON.parse(requestData));
       } catch (e) {
@@ -242,6 +244,7 @@ CollectionAPI._requestListener.prototype._deleteRequest = function() {
 CollectionAPI._requestListener.prototype._postRequest = function() {
   var self = this;
   var requestData = '';
+  var options = self._server.options;
 
   self._request.on('data', function(chunk) {
     requestData += chunk.toString();
@@ -250,8 +253,8 @@ CollectionAPI._requestListener.prototype._postRequest = function() {
   self._request.on('end', function() {
     Fiber(function() {
       try {
-        if (self.options.alterDataOnPost){
-          requestData = self.options.alterDataOnPost(requestData);
+        if (options.alterDataOnPost){
+          requestData = options.alterDataOnPost(requestData);
         }
         self._requestPath.collectionId = self._requestCollection.insert(JSON.parse(requestData));
       } catch (e) {
