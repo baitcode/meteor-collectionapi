@@ -211,10 +211,11 @@ CollectionAPI._requestListener.prototype._putRequest = function() {
   self._request.on('end', function() {
     Fiber(function() {
       try {
+          var data = JSON.parse(requestData);
           if (options.alterDataOnPut){
-              requestData = options.alterDataOnPut(requestData);
+              data = options.alterDataOnPut(data);
           }
-          self._requestCollection.update(self._requestPath.collectionId, JSON.parse(requestData));
+          self._requestCollection.update(self._requestPath.collectionId, data);
       } catch (e) {
         return self._internalServerErrorResponse(e);
       }
@@ -253,10 +254,11 @@ CollectionAPI._requestListener.prototype._postRequest = function() {
   self._request.on('end', function() {
     Fiber(function() {
       try {
+        var data = JSON.parse(requestData);
         if (options.alterDataOnPost){
-          requestData = options.alterDataOnPost(requestData);
+          data = options.alterDataOnPost(data);
         }
-        self._requestPath.collectionId = self._requestCollection.insert(JSON.parse(requestData));
+        self._requestPath.collectionId = self._requestCollection.insert(data);
       } catch (e) {
         return self._internalServerErrorResponse(e);
       }
